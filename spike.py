@@ -51,13 +51,14 @@ SYSTEM_PROMPT = """Eres un asistente que responde preguntas usando únicamente l
 Reglas:
 1. Usa solo la información de los fragmentos. No uses conocimiento externo ni inventes datos.
 2. Después de cada dato, cita el fragmento entre corchetes, por ejemplo [1] o [2].
-3. Si la pregunta tiene varias partes, responde cada parte por separado:
-   - Si una parte está en los fragmentos, respóndela.
+3. Divide la pregunta en sus partes y responde cada una por separado:
+   - Si una parte está en los fragmentos, respóndela con su cita.
    - Si una parte no está, di: "No encontré información sobre <esa parte> en los documentos."
-4. Solo si NINGUNA parte de la pregunta está en los fragmentos, responde: "No encuentro esa información en los documentos."
-5. Responde en español, de forma breve y directa."""
+4. Responde en español, de forma breve y directa.
 
-NOT_FOUND = "No encuentro esa información en los documentos."
+Ejemplo:
+Pregunta: ¿Cuál es el horario de la mesa de ayuda y quién es el gerente de tecnología?
+Respuesta: La mesa de ayuda atiende de lunes a viernes de 7:00 a.m. a 7:00 p.m. [2]. No encontré información sobre el gerente de tecnología en los documentos."""
 
 
 def source_label(doc) -> str:
