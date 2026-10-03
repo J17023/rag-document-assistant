@@ -1,4 +1,3 @@
-"""Spike: RAG de punta a punta en un solo script para validar el flujo."""
 import os
 import shutil
 from pathlib import Path
@@ -15,9 +14,8 @@ load_dotenv()
 DOCS_DIR = Path("data/docs")
 DB_DIR = "vectorstore"
 TOP_K = 5
-SCORE_THRESHOLD = 0.2  # red de seguridad; con e5 los scores son altos y comprimidos
+SCORE_THRESHOLD = 0.2  
 
-# 1. Cargar documentos
 docs = []
 for path in DOCS_DIR.iterdir():
     if path.suffix == ".pdf":
@@ -25,13 +23,10 @@ for path in DOCS_DIR.iterdir():
     elif path.suffix in {".md", ".txt"}:
         docs += TextLoader(str(path), encoding="utf-8").load()
 
-# 2. Chunking (500 para que cada sección quede más aislada)
-splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=80)
+splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=50)
 chunks = splitter.split_documents(docs)
 print(f"{len(docs)} páginas/documentos -> {len(chunks)} chunks")
 
-# 3-4. Embeddings + vector store (se reconstruye en cada ejecución)
-# e5 necesita los prefijos "query: " (preguntas) y "passage: " (documentos)
 shutil.rmtree(DB_DIR, ignore_errors=True)
 embeddings = HuggingFaceEmbeddings(
     model_name=os.getenv("EMBEDDING_MODEL", "intfloat/multilingual-e5-base"),
@@ -45,7 +40,6 @@ db = Chroma.from_documents(
     collection_metadata={"hnsw:space": "cosine"},
 )
 
-# 5. LLM configurable desde .env
 llm = init_chat_model(
     model=os.getenv("LLM_MODEL", "qwen2.5:7b"),
     model_provider=os.getenv("LLM_PROVIDER", "ollama"),
@@ -74,7 +68,6 @@ def source_label(doc) -> str:
 
 
 def ask(question: str, k: int = TOP_K) -> None:
-    # 6. Recuperar contexto relevante
     results = db.similarity_search_with_relevance_scores(question, k=k)
     relevant = [(d, s) for d, s in results if s >= SCORE_THRESHOLD]
 
@@ -86,8 +79,7 @@ def ask(question: str, k: int = TOP_K) -> None:
     if not relevant:
         print(f"A: {NOT_FOUND} (ningún fragmento superó el umbral)")
         return
-
-    # 7. Generar respuesta con el contexto recuperado
+    
     context = "\n\n".join(
         f"[{i}] ({source_label(d)})\n{d.page_content}"
         for i, (d, _) in enumerate(relevant, 1)
