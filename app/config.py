@@ -1,4 +1,4 @@
-"""Configuración de la aplicación, leída desde variables de entorno y el archivo .env."""
+"Configuración de la aplicación, leída desde variables de entorno y el archivo .env."
 from functools import lru_cache
 from pathlib import Path
 
@@ -10,7 +10,7 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    """Parámetros configurables del asistente"""
+    "Parámetros configurables del asistente"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
@@ -36,5 +36,5 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
-    """Devuelve una única instancia de la configuración."""
+    "Devuelve una única instancia de la configuración."
     return Settings()
