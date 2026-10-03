@@ -68,6 +68,16 @@ def source_label(doc) -> str:
     return f"{name}, p.{page + 1}" if page is not None else name
 
 
+def content_to_text(content) -> str:
+    """Gemini devuelve una lista de partes; Ollama, un string. Se unifica a texto."""
+    if isinstance(content, str):
+        return content.strip()
+    return "".join(
+        part if isinstance(part, str) else part.get("text", "")
+        for part in content
+        if isinstance(part, str) or part.get("type") == "text"
+    ).strip()
+
 def ask(question: str, k: int = TOP_K) -> None:
     results = db.similarity_search_with_relevance_scores(question, k=k)
     relevant = [(d, s) for d, s in results if s >= SCORE_THRESHOLD]
@@ -89,7 +99,7 @@ def ask(question: str, k: int = TOP_K) -> None:
         ("system", SYSTEM_PROMPT),
         ("human", f"Fragmentos:\n{context}\n\nPregunta: {question}"),
     ])
-    print(f"A: {response.content}")
+    print(f"A: {content_to_text(response.content)}")
 
 
 if __name__ == "__main__":
