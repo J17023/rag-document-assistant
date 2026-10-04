@@ -68,15 +68,32 @@ rag-document-assistant/
 │   ├── schemas.py          # Modelos de entrada y salida de la API
 │   ├── main.py             # Creación de la API (FastAPI)
 │   └── routers/            # Endpoints agrupados por funcionalidad
-│       ├── health.py
-│       ├── documents.py
-│       └── qa.py
+│       ├── health.py       # Estado del servicio
+│       ├── documents.py    # Listar, subir y reindexar documentos
+│       └── qa.py           # Preguntas al asistente
 ├── data/docs/              # Documentos a consultar
-├── evaluation/             # Preguntas de prueba, script y resultados
-├── docs/                   # Uso de herramientas de AI y evidencias
+├── evaluation/
+│   ├── questions.json      # Preguntas de prueba por categoría
+│   ├── run_eval.py         # Script de evaluación
+│   └── results_*.md/json   # Resultados por modelo (qwen2.5 y Gemini)
+├── tests/                  # Pruebas automáticas con pytest
+│   ├── conftest.py         # Fixtures y modelos falsos compartidos
+│   ├── test_loaders.py
+│   ├── test_chunking.py
+│   ├── test_prompts.py
+│   ├── test_rag_service.py
+│   └── test_api.py
+├── docs/
+│   ├── AI_ASSISTED_DEV.md  # Uso de herramientas de AI en el desarrollo
+│   └── evidence/
+│       ├── diagnostic/     # Salidas de cada iteración del diagnóstico
+│       └── execution/      # Capturas del sistema funcionando
+├── vectorstore/            # Índice de Chroma (se genera al indexar, no se sube)
 ├── .env.example            # Plantilla de configuración
-├── requirements.txt        # Dependencias
-└── README.md               # Documentación del proyecto
+├── .gitignore
+├── pytest.ini              # Configuración de pytest
+├── requirements.txt
+└── README.md
 ```
 
 Toda la lógica vive en `RAGService` (`app/rag.py`). La consola, la API y la evaluación son distintas formas de usar ese mismo servicio.
