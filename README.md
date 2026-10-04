@@ -177,6 +177,8 @@ curl -X POST http://localhost:8000/documents/ingest
 
 Si el índice está vacío, se construye automáticamente con la primera pregunta.
 
+En [`docs/evidence/execution/`](docs/evidence/execution/05_upload_document.png) está la prueba de la carga por la API: se subió un documento nuevo (`politica_capacitacion.md`) y el índice se reconstruyó automáticamente, pasando de 2 documentos y 21 fragmentos a 3 documentos y 26. El rechazo de formatos no soportados y archivos vacíos (error 400) está cubierto por las pruebas de `tests/test_api.py`.
+
 ## Cómo hacer preguntas
 
 ### Con la API
