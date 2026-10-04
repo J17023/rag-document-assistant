@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "type": "respondible",
+    "question": "¿Cuántos días de vacaciones tengo al año?",
+    "expected": "15 días hábiles por año; desde el 5.º año, 2 días adicionales por año hasta un máximo de 20."
+  },
+  {
+    "id": 2,
+    "type": "respondible",
+    "question": "¿Cuánto es el auxilio de conectividad para un trabajador 100 % remoto?",
+    "expected": "180 000 COP mensuales (manual de trabajo remoto, p.1)."
+  },
+  {
+    "id": 3,
+    "type": "parcial",
+    "question": "¿Cuántos días de vacaciones tengo y cuánto cubre el seguro de salud?",
+    "expected": "Responde los días de vacaciones e indica que no hay información sobre el seguro de salud."
+  },
+  {
+    "id": 4,
+    "type": "no_respondible",
+    "question": "¿Cuál es el salario de un analista junior?",
+    "expected": "Indica que no encuentra esa información en los documentos."
+  },
+  {
+    "id": 5,
+    "type": "multi_documento",
+    "question": "Si soy remoto y quiero hacer un diplomado, ¿qué auxilios recibo?",
+    "expected": "Auxilio de conectividad de 180 000 COP mensuales y auxilio educativo de hasta el 70 % con tope de 6 000 000 COP anuales."
+  },
+  {
+    "id": 6,
+    "type": "no_respondible",
+    "question": "¿Cuál es la capital de Francia?",
+    "expected": "Indica que no encuentra esa información en los documentos (no debe usar conocimiento externo)."
+  }
+]
