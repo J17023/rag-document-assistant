@@ -75,7 +75,8 @@ rag-document-assistant/
 ├── evaluation/             # Preguntas de prueba, script y resultados
 ├── docs/                   # Uso de herramientas de AI y evidencias
 ├── .env.example            # Plantilla de configuración
-└── requirements.txt
+├── requirements.txt        # Dependencias
+└── README.md               # Documentación del proyecto
 ```
 
 Toda la lógica vive en `RAGService` (`app/rag.py`). La consola, la API y la evaluación son distintas formas de usar ese mismo servicio.
