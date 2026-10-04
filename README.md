@@ -26,7 +26,8 @@ Prototipo desarrollado como prueba técnica para el cargo de **AI Developer Engi
 ## Descripción de la solución
 
 ```mermaid
-flowchart LR
+%%{init: {'themeVariables': {'fontSize': '18px'}}}%%
+flowchart TD
     A[PDF / MD / TXT] -->|pypdf| B[Texto por página]
     B -->|RecursiveCharacterTextSplitter| C[Chunks de 400 caracteres]
     C -->|multilingual-e5-base| D[(Chroma local)]
@@ -282,7 +283,8 @@ El sistema se desarrolló primero como un script de punta a punta (_spike_) para
 
 ## Mejoras futuras
 
-- **Recuperación:** búsqueda híbrida (BM25 + vectores) y _reranking_ con un cross-encoder, para que el score separe mejor lo relevante de lo irrelevante.
+**Reranking de los fragmentos recuperados:** con e5 los scores quedan en un rango estrecho (≈0.77–0.87) incluso para fragmentos irrelevantes, por lo que el umbral de similitud casi no filtra. Un cross-encoder reordenaría los candidatos evaluando cada pregunta junto con cada fragmento, con scores más separados entre lo relevante y lo irrelevante, de modo que el umbral sí permita detectar cuándo la respuesta no está en los documentos.
+
 - **Chunking por secciones**, usando los encabezados del Markdown y los títulos del PDF en lugar de un número fijo de caracteres.
 - **Extracción de tablas** con una librería especializada, para conservar filas y columnas.
 - **Evaluación automática** con métricas de fidelidad y relevancia (por ejemplo, RAGAS) y un conjunto de preguntas más amplio.
@@ -290,6 +292,11 @@ El sistema se desarrolló primero como un script de punta a punta (_spike_) para
 - **Memoria conversacional** para preguntas de seguimiento.
 - **Despliegue en la nube:** API en un contenedor (AWS EC2 o Lambda), documentos en S3 y un vector store gestionado.
 - **Autenticación** y control de acceso por documento.
+- **Respaldo automático entre LLMs (_fallback_):** si el proveedor principal falla (cuota agotada, tiempo de espera agotado o servicio caído), cambiar automáticamente al otro, por ejemplo de Gemini a Ollama. Así el asistente sigue respondiendo aunque uno de los dos deje de funcionar. LangChain lo permite con `with_fallbacks()`, y el proveedor de respaldo se definiría en el `.env` igual que el principal.
+- **Caché de preguntas frecuentes:** detectar las preguntas que se repiten y responderlas sin llamar al LLM. Funcionaría en tres pasos:
+  1. **Agrupar preguntas equivalentes:** comparar cada pregunta nueva con las anteriores usando los mismos embeddings. Si la similitud supera un umbral alto (por ejemplo, ≥ 0.95), se cuenta como la misma pregunta ("¿Cuántos días de vacaciones tengo?" y "¿Cuántos días de vacaciones me corresponden?").
+  2. **Contar la frecuencia:** llevar un conteo de cuántas veces se hace cada pregunta.
+  3. **Decidir con un umbral de frecuencia:** cuando una pregunta supera el umbral (por ejemplo, 5 veces), se guarda su respuesta con sus fuentes y las siguientes veces se devuelve desde la caché. Las preguntas nuevas o poco frecuentes siguen el
 
 ## Uso de herramientas de AI
 
