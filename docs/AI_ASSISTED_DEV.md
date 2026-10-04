@@ -4,11 +4,11 @@ Este documento describe cómo usé herramientas de AI durante el desarrollo, qu�
 
 ## Herramientas utilizadas
 
-| Herramienta | Uso |
-|---|---|
-| **Claude** (chat) | Asistente de consulta: planeación, explicación de conceptos, propuestas de código y apoyo en el análisis de resultados |
-| **GitHub Copilot** (en VS Code) | Autocompletado mientras escribía y editaba el código, y consultas puntuales dentro del editor |
-| **VS Code** | Edición manual del código, revisión de cambios y ejecución |
+| Herramienta                     | Uso                                                                                                                    |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **Claude** (chat)               | Asistente de consulta: planeación, explicación de conceptos, propuestas de código y apoyo en el análisis de resultados |
+| **GitHub Copilot** (en VS Code) | Autocompletado mientras escribía y editaba el código, y consultas puntuales dentro del editor                          |
+| **VS Code**                     | Edición manual del código, revisión de cambios y ejecución                                                             |
 
 ## Cómo trabajé con la herramienta
 
@@ -26,7 +26,7 @@ Cuando una parte del código no la entendía, pedía la explicación antes de us
 ### Claude
 
 - **Planeación:** desglosar la prueba en pasos y definir el orden de trabajo.
-- **Propuestas de código:** primera versión del script de punta a punta (*spike*) y, después, de cada módulo de la estructura final.
+- **Propuestas de código:** primera versión del script de punta a punta (_spike_) y, después, de cada módulo de la estructura final.
 - **Explicación de conceptos:** qué hace cada dependencia, cómo funcionan los embeddings y las métricas de similitud, y elementos de Python (`@property`, `@dataclass`, `@lru_cache`).
 - **Discusión de resultados:** contrastar mis observaciones sobre las salidas de cada ejecución para identificar la causa de los errores (recuperación o generación) y decidir qué probar a continuación. Las salidas están en [`docs/evidence/`](evidence/).
 - **Estructura inicial de la documentación** (README y este documento), que completé con mis resultados, mis decisiones y los problemas que encontré.
@@ -67,7 +67,7 @@ Las sugerencias de Copilot las revisé antes de aceptarlas; varias no encajaban 
   - Normalizar los vectores y usar similitud coseno en Chroma.
   - Reindexar todos los documentos, porque los vectores de un modelo no son compatibles con los de otro.
   - Dejar el modelo configurable con `EMBEDDING_MODEL` en el `.env`.
-- **El modelo respondía "no encuentro" ante preguntas parcialmente respondibles**, aunque tenía parte de la respuesta. Quité del prompt la instrucción de rechazo literal y agregué un ejemplo de respuesta parcial (*few-shot*). Con eso respondió la parte disponible e indicó qué faltaba.
+- **El modelo respondía "no encuentro" ante preguntas parcialmente respondibles**, aunque tenía parte de la respuesta. Quité del prompt la instrucción de rechazo literal y agregué un ejemplo de respuesta parcial (_few-shot_). Con eso respondió la parte disponible e indicó qué faltaba.
 - **El modelo local (qwen2.5:7b) fallaba en la pregunta que combina dos documentos**: omitía un auxilio y tomaba el monto equivocado, aun con los fragmentos correctos en el contexto. Probé Gemini con el mismo pipeline y el mismo prompt, y resolvió el caso (6/6 frente a 5/6). Dejé el LLM configurable desde el `.env` para elegir entre calidad (Gemini) y privacidad y costo cero (Ollama).
 - `init_chat_model` fallaba porque faltaba instalar `langchain-ollama`.
 - `gemini-2.5-flash` dejó de estar disponible para cuentas nuevas; actualicé el nombre del modelo según el mensaje de error.
@@ -80,12 +80,14 @@ Las sugerencias de Copilot las revisé antes de aceptarlas; varias no encajaban 
 Revisé cada archivo al aplicarlo y pedí explicación de las partes que no entendía antes de usarlas.
 
 **Equivalencia entre el spike y la versión modular.** Al reorganizar el código comprobé que cada módulo hiciera lo mismo que el bloque correspondiente del spike:
+
 - El chunking modular generó los mismos 21 fragmentos que el spike.
 - La recuperación devolvió los mismos fragmentos con los mismos scores.
 - El prompt de la versión modular es idéntico al validado en el spike.
 - Revisé el manejo de los números de página: el spike sumaba 1 al mostrar la fuente porque el loader de LangChain numeraba desde 0; en la versión modular la corrección se movió al loader propio, por lo que la etiqueta ya no debe sumar 1.
 
 **Verificaciones de comportamiento:**
+
 - Que reindexar dos veces no duplicara fragmentos en Chroma (21 y 21).
 - Que el índice persistiera entre ejecuciones y se construyera solo cuando está vacío.
 - Que `langchain-community` ya no se importara en ningún módulo antes de quitarlo de las dependencias.
@@ -93,6 +95,7 @@ Revisé cada archivo al aplicarlo y pedí explicación de las partes que no ente
 - Que la validación de la API rechazara preguntas inválidas con 422.
 
 **Preguntas de diseño que planteé y resolví:**
+
 - Qué parámetros van en `config.py` (los valores validados en las pruebas) y cuáles en el `.env` (proveedor, modelo y claves), para no duplicar configuración.
 - Si cambiar la métrica de similitud mejoraría el umbral. Con embeddings normalizados, coseno, producto punto y distancia euclidiana dan el mismo orden, así que el problema es del modelo de embeddings y no de la métrica.
 
@@ -114,4 +117,5 @@ Revisé cada archivo al aplicarlo y pedí explicación de las partes que no ente
 
 ## Evidencias
 
-Las salidas de cada iteración del diagnóstico están en [`docs/evidence/`](evidence/).
+- [`evidence/diagnostic/`](evidence/diagnostic/): salidas de cada iteración del diagnóstico, que respaldan las decisiones técnicas.
+- [`evidence/execution/`](evidence/execution/): capturas de la API, la consola y la evaluación.
