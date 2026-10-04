@@ -111,9 +111,6 @@ Revisé cada archivo al aplicarlo y pedí explicación de las partes que no ente
 - **El score de similitud sirve para ordenar, no como medida absoluta.** Con e5 los scores quedan en un rango estrecho incluso para fragmentos irrelevantes, y cambiar la métrica no lo resuelve.
 - **Los modelos pequeños siguen mejor un ejemplo que una regla**, y cada ajuste del prompt puede romper otro caso. Hay que medir cada cambio con las mismas preguntas.
 - **Si un fallo persiste con la recuperación correcta, el límite puede ser el modelo.** La comparación entre qwen2.5:7b y Gemini lo confirmó.
-- **Validar primero y organizar después.** El script de punta a punta permitió detectar los problemas de calidad antes de invertir en la estructura modular.
-- **Revisar los warnings, no solo los errores.** El aviso de que `langchain-community` estaba deprecado llevó a reemplazar los loaders.
-- **La AI acelera, pero la verificación es mía.** Varias propuestas necesitaron ajustes al ejecutarlas en mi entorno (sistema operativo, versiones de librerías, nombres de modelos vigentes, límites de cuota).
 
 ## Evidencias
 
