@@ -1,5 +1,7 @@
 "Ejecuta las preguntas de prueba y guarda los resultados."
+import argparse
 import json
+import logging
 import re
 import time
 from datetime import datetime
@@ -7,6 +9,11 @@ from pathlib import Path
 
 from app.config import get_settings
 from app.rag import get_rag_service
+
+
+logging.basicConfig(level=logging.WARNING)
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+logging.getLogger("google_genai").setLevel(logging.ERROR)
 
 EVAL_DIR = Path(__file__).parent
 QUESTIONS_FILE = EVAL_DIR / "questions.json"
