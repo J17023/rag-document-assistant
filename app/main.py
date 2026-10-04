@@ -7,6 +7,7 @@ from app.routers import documents, health, qa
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+logging.getLogger("google_genai").setLevel(logging.ERROR)
 
 app = FastAPI(
     title="RAG Document Assistant",

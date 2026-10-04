@@ -31,6 +31,7 @@ def main() -> None:
 
     logging.basicConfig(level=logging.WARNING)
     logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+    logging.getLogger("google_genai").setLevel(logging.ERROR)
     service = get_rag_service()
 
     if args.command == "ingest":
