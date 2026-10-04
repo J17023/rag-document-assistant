@@ -1,0 +1,47 @@
+# Spike v1: embeddings paraphrase-multilingual-MiniLM, chunks 800/100, top_k 4, LLM qwen2.5:7b
+# Resultado: 2/5 correctas y 1 parcial. Falla la pregunta del auxilio (recuperación) y la parcial (generación); la multi documento solo menciona un auxilio.
+# ------------------------------------------------------------
+
+$ python spike.py
+spike.py:9: DeprecationWarning: `langchain-community` is being sunset and is no longer actively maintained. See https://github.com/langchain-ai/langchain-community/issues/674 for details and migration guidance toward standalone integration packages.
+  from langchain_community.document_loaders import PyPDFLoader, TextLoader
+3 páginas/documentos -> 11 chunks
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████| 199/199 [00:00<00:00, 5989.58it/s]
+
+Q: ¿Cuántos días de vacaciones tengo al año?
+   - politica_vacaciones_y_beneficios.md p.- score=0.57
+   - politica_vacaciones_y_beneficios.md p.- score=0.52
+   - politica_vacaciones_y_beneficios.md p.- score=0.36
+   - manual_trabajo_remoto.pdf p.1 score=0.36
+A: Todo colaborador tiene derecho a 15 días hábiles de vacaciones remuneradas por cada año completo de servicio. A partir del quinto año de antigüedad, la empresa otorga 2 días hábiles adicionales por año, hasta un máximo de 20 días hábiles anuales.
+
+Q: ¿Cuánto es el auxilio de conectividad para un trabajador 100 % remoto?
+   - manual_trabajo_remoto.pdf p.1 score=0.50
+   - politica_vacaciones_y_beneficios.md p.- score=0.44
+   - politica_vacaciones_y_beneficios.md p.- score=0.42
+   - manual_trabajo_remoto.pdf p.0 score=0.38
+A: No encuentro esa información en los documentos.
+
+Q: ¿Cuántos días de vacaciones tengo y cuánto cubre el seguro de salud?
+   - politica_vacaciones_y_beneficios.md p.- score=0.50
+   - politica_vacaciones_y_beneficios.md p.- score=0.49
+   - politica_vacaciones_y_beneficios.md p.- score=0.31
+   - politica_vacaciones_y_beneficios.md p.- score=0.31
+A: No encuentro esa información en los documentos.
+
+Q: ¿Cuál es el salario de un analista junior?
+   - politica_vacaciones_y_beneficios.md p.- score=0.46
+   - manual_trabajo_remoto.pdf p.0 score=0.25
+   - politica_vacaciones_y_beneficios.md p.- score=0.23
+   - politica_vacaciones_y_beneficios.md p.- score=0.20
+A: No encuentro esa información en los documentos.
+
+Q: Si soy remoto y quiero hacer un diplomado, ¿qué auxilios recibo?
+   - politica_vacaciones_y_beneficios.md p.- score=0.40
+   - manual_trabajo_remoto.pdf p.1 score=0.25
+   - politica_vacaciones_y_beneficios.md p.- score=0.24
+   - manual_trabajo_remoto.pdf p.0 score=0.24
+A: Según el contexto proporcionado, la empresa financia hasta el 70% del valor de cursos, diplomados o posgrados relacionados con el cargo, con un tope anual de 6 000 000 COP por colaborador. Sin embargo, no se especifica si los colaboradores remotos son elegibles para este auxilio educativo. Necesitarías verificar si hay alguna política adicional para colaboradores remotos en los documentos internos.
+
+Fuente: [1] (politica_vacaciones_y_beneficios.md, p.-)

@@ -1,0 +1,279 @@
+# Diagnóstico de la v1: búsqueda de 'conectividad' en los chunks e impresión del contexto que recibe el LLM
+# Muestra que el fragmento con el auxilio mezcla tres secciones y no llega al LLM (pregunta 2), y que en la pregunta 3 el fragmento correcto sí llega.
+# ------------------------------------------------------------
+
+$ python spike.py
+spike.py:9: DeprecationWarning: `langchain-community` is being sunset and is no longer actively maintained. See https://github.com/langchain-ai/langchain-community/issues/674 for details and migration guidance toward standalone integration packages.
+  from langchain_community.document_loaders import PyPDFLoader, TextLoader
+3 páginas/documentos -> 11 chunks
+
+1 chunks mencionan 'conectividad'
+{'producer': 'ReportLab PDF Library - (opensource)', 'creator': '(unspecified)', 'creationdate': '2026-10-02T00:37:04-05:00', 'author': '(anonymous)', 'keywords': '', 'moddate': '2026-10-02T00:37:04-05:00', 'subject': '(unspecified)', 'title': 'Manual de Trabajo Remoto y Uso de Equipos', 'trapped': '/False', 'source': 'data/docs/manual_trabajo_remoto.pdf', 'total_pages': 2, 'page': 0, 'page_label': '1'} 
+ transporte y el alojamiento de esa semana.
+2. Horario y disponibilidad
+El horario núcleo, en el que todos deben estar disponibles en los canales de comunicación, es de 9:00
+a.m. a 4:00 p.m. (hora de Colombia). Fuera de ese horario cada colaborador organiza su jornada,
+respetando las 44 horas semanales máximas.
+Las reuniones internas no deben programarse antes de las 8:00 a.m. ni después de las 6:00 p.m., en
+cumplimiento de la política de desconexión laboral.
+3. Auxilio de conectividad
+Los colaboradores en modalidad híbrida o remota reciben un auxilio de conectividad mensual para
+cubrir internet y energía:
+ Modalidad
+Auxilio mensual
+Híbrida
+120 000 COP
+100 % remota
+180 000 COP
+El auxilio se paga junto con la nómina del último día hábil de cada mes y no constituye salario. 
+---
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████| 199/199 [00:00<00:00, 6109.04it/s]
+
+Q: ¿Cuántos días de vacaciones tengo al año?
+   - politica_vacaciones_y_beneficios.md p.- score=0.57
+   - politica_vacaciones_y_beneficios.md p.- score=0.52
+   - politica_vacaciones_y_beneficios.md p.- score=0.36
+   - manual_trabajo_remoto.pdf p.1 score=0.36
+[1] (politica_vacaciones_y_beneficios.md, p.-)
+## 2. Vacaciones
+
+### 2.1 Días de vacaciones
+
+- Todo colaborador tiene derecho a **15 días hábiles** de vacaciones remuneradas por cada año completo de servicio.
+- A partir del **quinto año** de antigüedad, la empresa otorga **2 días hábiles adicionales** por año, hasta un máximo de **20 días hábiles** anuales.
+- Los colaboradores en periodo de prueba (primeros **2 meses**) no pueden solicitar vacaciones.
+
+### 2.2 Solicitud de vacaciones
+
+1. La solicitud se hace a través del portal interno **Nimbus People**.
+2. Debe enviarse con al menos **15 días calendario** de anticipación.
+3. El líder directo tiene **3 días hábiles** para aprobar o rechazar la solicitud.
+4. Si el líder no responde en ese plazo, la solicitud pasa automáticamente a Gestión Humana.
+
+### 2.3 Acumulación
+
+[2] (politica_vacaciones_y_beneficios.md, p.-)
+### 2.3 Acumulación
+
+- Se pueden acumular vacaciones de máximo **2 periodos** (dos años).
+- Los días acumulados por encima de ese límite deben programarse en los siguientes **6 meses**.
+- No se permite compensar en dinero las vacaciones, salvo al terminar el contrato.
+
+## 3. Permisos remunerados
+
+[3] (politica_vacaciones_y_beneficios.md, p.-)
+## 3. Permisos remunerados
+
+| Tipo de permiso                           | Duración                                      |
+| ----------------------------------------- | --------------------------------------------- |
+| Matrimonio del colaborador                | 5 días hábiles                                |
+| Fallecimiento de familiar en primer grado | 5 días hábiles (licencia de luto)             |
+| Mudanza                                   | 1 día hábil por año                           |
+| Cumpleaños del colaborador                | Medio día (tarde libre) el día del cumpleaños |
+| Grado académico del colaborador           | 1 día hábil                                   |
+| Cita médica                               | Tiempo necesario, con soporte de la cita      |
+
+[4] (manual_trabajo_remoto.pdf, p.1)
+lunes a viernes de 7:00 a.m. a 7:00 p.m.
+ Prioridad
+Ejemplo
+Tiempo de respuesta
+Crítica
+Equipo robado, sin acceso a VPN
+1 hora
+Alta
+Falla de una herramienta de trabajo
+4 horas
+Media
+Solicitud de software
+1 día hábil
+Baja
+Consultas generales
+3 días hábiles
+A: Todo colaborador tiene derecho a 15 días hábiles de vacaciones remuneradas por cada año completo de servicio. A partir del quinto año de antigüedad, la empresa otorga 2 días hábiles adicionales por año, hasta un máximo de 20 días hábiles anuales.
+
+Q: ¿Cuánto es el auxilio de conectividad para un trabajador 100 % remoto?
+   - manual_trabajo_remoto.pdf p.1 score=0.50
+   - politica_vacaciones_y_beneficios.md p.- score=0.44
+   - politica_vacaciones_y_beneficios.md p.- score=0.42
+   - manual_trabajo_remoto.pdf p.0 score=0.38
+[1] (manual_trabajo_remoto.pdf, p.1)
+4. Equipos asignados
+Cada colaborador recibe al ingresar un portátil corporativo, un mouse y unos audífonos con
+micrófono. Los equipos se renuevan cada 3 años. Si el colaborador es 100 % remoto, también recibe
+un monitor externo de 24 pulgadas.
+Los equipos son propiedad de la empresa y deben devolverse en un plazo máximo de 5 días hábiles
+después de la terminación del contrato.
+5. Seguridad de la información
+ Es obligatorio usar la VPN corporativa (NimbusConnect) para acceder a sistemas internos fuera de
+la oficina.
+ La autenticación en dos pasos (2FA) es obligatoria en el correo y en todas las herramientas
+corporativas.
+ Está prohibido trabajar con información de clientes desde redes Wi-Fi públicas (cafés, aeropuertos,
+centros comerciales).
+
+[2] (politica_vacaciones_y_beneficios.md, p.-)
+## 2. Vacaciones
+
+### 2.1 Días de vacaciones
+
+- Todo colaborador tiene derecho a **15 días hábiles** de vacaciones remuneradas por cada año completo de servicio.
+- A partir del **quinto año** de antigüedad, la empresa otorga **2 días hábiles adicionales** por año, hasta un máximo de **20 días hábiles** anuales.
+- Los colaboradores en periodo de prueba (primeros **2 meses**) no pueden solicitar vacaciones.
+
+### 2.2 Solicitud de vacaciones
+
+1. La solicitud se hace a través del portal interno **Nimbus People**.
+2. Debe enviarse con al menos **15 días calendario** de anticipación.
+3. El líder directo tiene **3 días hábiles** para aprobar o rechazar la solicitud.
+4. Si el líder no responde en ese plazo, la solicitud pasa automáticamente a Gestión Humana.
+
+### 2.3 Acumulación
+
+[3] (politica_vacaciones_y_beneficios.md, p.-)
+Los permisos se solicitan también en **Nimbus People**, adjuntando el soporte correspondiente cuando aplique.
+
+## 4. Beneficios adicionales
+
+### 4.1 Auxilio educativo
+
+- La empresa financia hasta el **70 %** del valor de cursos, diplomados o posgrados relacionados con el cargo.
+- El tope anual es de **6 000 000 COP** por colaborador.
+- Requisito: antigüedad mínima de **1 año** y aprobación del líder.
+- Si el colaborador se retira antes de **12 meses** después de terminar el programa, debe devolver el 50 % del auxilio recibido.
+
+### 4.2 Día de bienestar
+
+Cada colaborador tiene **1 día libre por semestre** llamado "Día de bienestar", que puede usar sin justificación. No es acumulable de un semestre a otro.
+
+### 4.3 Programa de reconocimiento
+
+[4] (manual_trabajo_remoto.pdf, p.0)
+Manual de Trabajo Remoto y Uso de Equipos
+Empresa: Nimbus Analytics S.A.S. (empresa ficticia)
+Código: TI-MAN-007   Versión: 1.4   Vigente desde: 15 de marzo de 2026
+Responsables: Gestión Humana y Tecnología
+1. Modalidad de trabajo
+Nimbus Analytics opera bajo un modelo híbrido. Los colaboradores deben asistir a la oficina principal
+en Bogotá un mínimo de 2 días por semana. Los días presenciales obligatorios para todos los
+equipos son los martes. El segundo día lo acuerda cada equipo con su líder.
+Los colaboradores que viven a más de 100 km de Bogotá pueden solicitar la modalidad 100 %
+remota. En ese caso deben asistir presencialmente 1 semana por trimestre; la empresa cubre el
+transporte y el alojamiento de esa semana.
+2. Horario y disponibilidad
+A: No encuentro esa información en los documentos.
+
+Q: ¿Cuántos días de vacaciones tengo y cuánto cubre el seguro de salud?
+   - politica_vacaciones_y_beneficios.md p.- score=0.50
+   - politica_vacaciones_y_beneficios.md p.- score=0.49
+   - politica_vacaciones_y_beneficios.md p.- score=0.31
+   - politica_vacaciones_y_beneficios.md p.- score=0.31
+[1] (politica_vacaciones_y_beneficios.md, p.-)
+## 2. Vacaciones
+
+### 2.1 Días de vacaciones
+
+- Todo colaborador tiene derecho a **15 días hábiles** de vacaciones remuneradas por cada año completo de servicio.
+- A partir del **quinto año** de antigüedad, la empresa otorga **2 días hábiles adicionales** por año, hasta un máximo de **20 días hábiles** anuales.
+- Los colaboradores en periodo de prueba (primeros **2 meses**) no pueden solicitar vacaciones.
+
+### 2.2 Solicitud de vacaciones
+
+1. La solicitud se hace a través del portal interno **Nimbus People**.
+2. Debe enviarse con al menos **15 días calendario** de anticipación.
+3. El líder directo tiene **3 días hábiles** para aprobar o rechazar la solicitud.
+4. Si el líder no responde en ese plazo, la solicitud pasa automáticamente a Gestión Humana.
+
+### 2.3 Acumulación
+
+[2] (politica_vacaciones_y_beneficios.md, p.-)
+### 2.3 Acumulación
+
+- Se pueden acumular vacaciones de máximo **2 periodos** (dos años).
+- Los días acumulados por encima de ese límite deben programarse en los siguientes **6 meses**.
+- No se permite compensar en dinero las vacaciones, salvo al terminar el contrato.
+
+## 3. Permisos remunerados
+
+[3] (politica_vacaciones_y_beneficios.md, p.-)
+## 3. Permisos remunerados
+
+| Tipo de permiso                           | Duración                                      |
+| ----------------------------------------- | --------------------------------------------- |
+| Matrimonio del colaborador                | 5 días hábiles                                |
+| Fallecimiento de familiar en primer grado | 5 días hábiles (licencia de luto)             |
+| Mudanza                                   | 1 día hábil por año                           |
+| Cumpleaños del colaborador                | Medio día (tarde libre) el día del cumpleaños |
+| Grado académico del colaborador           | 1 día hábil                                   |
+| Cita médica                               | Tiempo necesario, con soporte de la cita      |
+
+[4] (politica_vacaciones_y_beneficios.md, p.-)
+# Política de Vacaciones, Permisos y Beneficios
+
+**Empresa:** Nimbus Analytics S.A.S. (empresa ficticia)
+**Código del documento:** RH-POL-003
+**Versión:** 2.1
+**Vigente desde:** 1 de febrero de 2026
+**Responsable:** Área de Gestión Humana
+
+---
+
+## 1. Objetivo
+
+Establecer las reglas para solicitar y disfrutar vacaciones, permisos remunerados y los beneficios adicionales que Nimbus Analytics ofrece a sus colaboradores con contrato a término indefinido o fijo.
+
+## 2. Vacaciones
+
+### 2.1 Días de vacaciones
+A: No encuentro esa información en los documentos.
+
+Q: ¿Cuál es el salario de un analista junior?
+   - politica_vacaciones_y_beneficios.md p.- score=0.46
+   - manual_trabajo_remoto.pdf p.0 score=0.25
+   - politica_vacaciones_y_beneficios.md p.- score=0.23
+   - politica_vacaciones_y_beneficios.md p.- score=0.20
+[1] (politica_vacaciones_y_beneficios.md, p.-)
+Los permisos se solicitan también en **Nimbus People**, adjuntando el soporte correspondiente cuando aplique.
+
+## 4. Beneficios adicionales
+
+### 4.1 Auxilio educativo
+
+- La empresa financia hasta el **70 %** del valor de cursos, diplomados o posgrados relacionados con el cargo.
+- El tope anual es de **6 000 000 COP** por colaborador.
+- Requisito: antigüedad mínima de **1 año** y aprobación del líder.
+- Si el colaborador se retira antes de **12 meses** después de terminar el programa, debe devolver el 50 % del auxilio recibido.
+
+### 4.2 Día de bienestar
+
+Cada colaborador tiene **1 día libre por semestre** llamado "Día de bienestar", que puede usar sin justificación. No es acumulable de un semestre a otro.
+
+### 4.3 Programa de reconocimiento
+A: No encuentro esa información en los documentos.
+
+Q: Si soy remoto y quiero hacer un diplomado, ¿qué auxilios recibo?
+   - politica_vacaciones_y_beneficios.md p.- score=0.40
+   - manual_trabajo_remoto.pdf p.1 score=0.25
+   - politica_vacaciones_y_beneficios.md p.- score=0.24
+   - manual_trabajo_remoto.pdf p.0 score=0.24
+[1] (politica_vacaciones_y_beneficios.md, p.-)
+Los permisos se solicitan también en **Nimbus People**, adjuntando el soporte correspondiente cuando aplique.
+
+## 4. Beneficios adicionales
+
+### 4.1 Auxilio educativo
+
+- La empresa financia hasta el **70 %** del valor de cursos, diplomados o posgrados relacionados con el cargo.
+- El tope anual es de **6 000 000 COP** por colaborador.
+- Requisito: antigüedad mínima de **1 año** y aprobación del líder.
+- Si el colaborador se retira antes de **12 meses** después de terminar el programa, debe devolver el 50 % del auxilio recibido.
+
+### 4.2 Día de bienestar
+
+Cada colaborador tiene **1 día libre por semestre** llamado "Día de bienestar", que puede usar sin justificación. No es acumulable de un semestre a otro.
+
+### 4.3 Programa de reconocimiento
+A: Según el contexto proporcionado, la empresa financia hasta el 70% del valor de cursos, diplomados o posgrados relacionados con el cargo, con un tope anual de 6 000 000 COP por colaborador. Sin embargo, no se especifica si los colaboradores remotos son elegibles para este auxilio educativo. Necesitarías verificar si hay alguna política adicional para colaboradores remotos en los documentos internos.
+
+Fuente: [1] (politica_vacaciones_y_beneficios.md, p.-)
